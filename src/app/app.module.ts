@@ -1,23 +1,30 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './component/header/header.component';
 import { SignupComponent } from './auth/signup/signup.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { LoginComponent } from './auth/login/login.component';
-import { UserProfileComponent } from './auth/user-profile/user-profile.component';
 import { NgxWebstorageModule } from 'ngx-webstorage';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { TokenInterceptor } from './token-interceptor';
 import { HomeComponent } from './component/home/home.component';
-import { PostComponent } from './component/post/post.component';
-import { SubredditComponent } from './component/subreddit/subreddit.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { PostTileComponent } from './component/shared/post-tile/post-tile.component';
+import { VoteButtonComponent } from './component/shared/vote-button/vote-button.component';
 import { SideBarComponent } from './component/shared/side-bar/side-bar.component';
 import { SubredditSideBarComponent } from './component/shared/subreddit-side-bar/subreddit-side-bar.component';
-import { VoteButtonComponent } from './component/shared/vote-button/vote-button.component';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { CreateSubredditComponent } from './component/subreddit/create-subreddit/create-subreddit.component';
+import { CreatePostComponent } from './component/post/create-post/create-post.component';
+import { ListSubredditsComponent } from './component/subreddit/list-subreddits/list-subreddits.component';
+import { EditorModule } from '@tinymce/tinymce-angular';
+import { ViewPostComponent } from './component/post/view-post/view-post.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { UserProfileComponent } from './auth/user-profile/user-profile.component';
 
 
 @NgModule({
@@ -26,14 +33,16 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     HeaderComponent,
     SignupComponent,
     LoginComponent,
-    UserProfileComponent,
     HomeComponent,
-    PostComponent,
-    SubredditComponent,
     PostTileComponent,
+    VoteButtonComponent,
     SideBarComponent,
     SubredditSideBarComponent,
-    VoteButtonComponent
+    CreateSubredditComponent,
+    CreatePostComponent,
+    ListSubredditsComponent,
+    ViewPostComponent,
+    UserProfileComponent
   ],
   imports: [
     BrowserModule,
@@ -41,10 +50,19 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     ReactiveFormsModule,
     HttpClientModule,
     NgxWebstorageModule.forRoot(),
+    BrowserAnimationsModule,
     ToastrModule.forRoot(),
-    FontAwesomeModule
+    FontAwesomeModule,
+    EditorModule,
+    NgbModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
